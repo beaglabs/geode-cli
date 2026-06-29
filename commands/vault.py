@@ -26,11 +26,11 @@ def register_vault_command(subparsers):
 def handle_vault(args):
     if args.vault_command == "set-url":
         token = args.token or os.environ.get("GEODE_TOKEN")
-        remote = args.url
+        remote = config.normalize_remote_url(args.url)
         vault_id = args.vault_id
 
-        if remote and not vault_id:
-            remote, vault_id = _detect_vault_config(remote, token)
+        if args.url and not vault_id:
+            remote, vault_id = _detect_vault_config(args.url, token)
 
         config.set_remote(remote)
         config.set_head_commit_id(None)

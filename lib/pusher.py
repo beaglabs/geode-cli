@@ -35,6 +35,7 @@ def start_push(
         _api_url(remote, f"/vaults/{vault_id}/push/start"),
         json={"files": manifest, "message": message, "base_commit_id": base_commit_id},
         headers=headers,
+        follow_redirects=True,
         timeout=30,
     )
     resp.raise_for_status()
@@ -70,6 +71,7 @@ def complete_push(
             "base_commit_id": base_commit_id,
         },
         headers=headers,
+        follow_redirects=True,
         timeout=30,
     )
     resp.raise_for_status()
@@ -84,6 +86,7 @@ def get_vault_info(remote: str, vault_id: str, token: Optional[str] = None) -> d
     resp = httpx.get(
         _api_url(remote, f"/vaults/{vault_id}"),
         headers=headers,
+        follow_redirects=True,
         timeout=30,
     )
     resp.raise_for_status()
@@ -103,6 +106,7 @@ def resolve_vault_by_path(
     resp = httpx.get(
         _api_url(remote, f"/vaults/by-path/{owner}/{vault_slug}"),
         headers=headers,
+        follow_redirects=True,
         timeout=30,
     )
     resp.raise_for_status()
@@ -127,6 +131,7 @@ def get_vault_tree_metadata(
         _api_url(remote, f"/vaults/{vault_id}/tree-metadata"),
         headers=headers,
         params=params,
+        follow_redirects=True,
         timeout=30,
     )
     resp.raise_for_status()
@@ -141,6 +146,7 @@ def get_push_run_status(remote: str, vault_id: str, run_id: str, token: Optional
     resp = httpx.get(
         _api_url(remote, f"/vaults/{vault_id}/push/{run_id}"),
         headers=headers,
+        follow_redirects=True,
         timeout=30,
     )
     resp.raise_for_status()
@@ -155,6 +161,7 @@ def download_vault_archive(remote: str, vault_id: str, token: Optional[str] = No
     resp = httpx.get(
         _api_url(remote, f"/vaults/{vault_id}/archive"),
         headers=headers,
+        follow_redirects=True,
         timeout=300,
     )
     resp.raise_for_status()

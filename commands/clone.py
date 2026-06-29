@@ -34,7 +34,7 @@ def _parse_clone_source(source: str, explicit_remote: str | None) -> tuple[str, 
     if len(parts) != 2:
         raise ValueError(f"invalid vault reference '{source}'. Use owner/vault or a full URL.")
 
-    remote = explicit_remote or config.get_remote()
+    remote = config.normalize_remote_url(explicit_remote) if explicit_remote else config.get_remote()
     if not remote:
         raise ValueError("owner/vault shorthand requires --remote or an existing workspace remote")
 

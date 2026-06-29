@@ -51,12 +51,12 @@ def handle_init(args):
         print("Error: workspace already has config values. Re-run with --force to overwrite them.")
         sys.exit(1)
 
-    remote = args.remote
+    remote = config.normalize_remote_url(args.remote) if args.remote else None
     vault_id = args.vault_id
     token = args.token or os.environ.get("GEODE_TOKEN")
 
-    if remote and not vault_id:
-        parsed_remote, detected_vault_id = _detect_vault_config(remote, token)
+    if args.remote and not vault_id:
+        parsed_remote, detected_vault_id = _detect_vault_config(args.remote, token)
         remote = parsed_remote
         vault_id = detected_vault_id
 

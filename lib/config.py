@@ -5,6 +5,8 @@ Reads/writes .geode/config.yaml in the project root.
 """
 
 import os
+from urllib.parse import urlparse
+
 import yaml
 from typing import Optional
 
@@ -33,13 +35,21 @@ def load_config(root_dir: str = ".") -> dict:
 
 
 def save_config(config: dict, root_dir: str = "."):
+    config = config.copy()
+    remote = config.get("remote")
+    if isinstance(remote, str):
+        config["remote"] = normalize_remote_url(remote)
+
     ensure_config_dir(root_dir)
     with open(_config_file(root_dir), "w") as f:
         yaml.safe_dump(config, f, default_flow_style=False, sort_keys=False)
 
 
 def get_remote(root_dir: str = ".") -> Optional[str]:
-    return load_config(root_dir).get("remote")
+    remote = load_config(root_dir).get("remote")
+    if not isinstance(remote, str):
+        return remote
+    return normalize_remote_url(remote)
 
 
 def get_vault_id(root_dir: str = ".") -> Optional[str]:
@@ -69,3 +79,14 @@ def set_head_commit_id(head_commit_id: Optional[str], root_dir: str = "."):
     else:
         config.pop("head_commit_id", None)
     save_config(config, root_dir)
+
+
+def normalize_remote_url(url: str) -> str:
+    if not (url.startswith("http://") or url.startswith("https://")):
+        return url
+
+    parsed = urlparse(url)
+    if not parsed.netloc:
+        return url
+
+    return f"{parsed.scheme}://{parsed.netloc}"
