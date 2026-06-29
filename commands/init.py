@@ -2,8 +2,8 @@ import os
 import sys
 from urllib.parse import urlparse
 
-from ..lib import config
-from ..lib.pusher import resolve_vault_by_path
+from lib import config
+from lib.pusher import resolve_vault_by_path
 
 
 DEFAULT_GEODEIGNORE = """# Geode ignore (gitignore-compatible format)

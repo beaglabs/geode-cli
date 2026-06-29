@@ -5,9 +5,9 @@ from urllib.parse import urlparse
 
 import httpx
 
-from ..lib import config
-from ..lib.archive import extract_archive_bytes
-from ..lib.pusher import download_vault_archive, resolve_vault_by_path
+from lib import config
+from lib.archive import extract_archive_bytes
+from lib.pusher import download_vault_archive, resolve_vault_by_path
 
 
 def register_clone_command(subparsers):

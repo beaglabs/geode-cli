@@ -3,9 +3,9 @@ import sys
 
 import httpx
 
-from ..lib import config
-from ..lib.pusher import get_vault_tree_metadata
-from ..lib.workspace import classify_push_outcome, plan_sync, scan_workspace
+from lib import config
+from lib.pusher import get_vault_tree_metadata
+from lib.workspace import classify_push_outcome, plan_sync, scan_workspace
 
 
 def register_status_command(subparsers):

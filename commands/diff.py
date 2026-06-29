@@ -4,9 +4,9 @@ import sys
 
 import httpx
 
-from ..lib import config
-from ..lib.pusher import get_vault_tree_metadata
-from ..lib.workspace import diff_entry_maps, scan_workspace
+from lib import config
+from lib.pusher import get_vault_tree_metadata
+from lib.workspace import diff_entry_maps, scan_workspace
 
 
 def register_diff_command(subparsers):

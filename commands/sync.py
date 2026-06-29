@@ -5,10 +5,10 @@ import shutil
 import sys
 import tempfile
 
-from ..lib import config
-from ..lib.archive import extract_archive_bytes, replace_directory_from_archive
-from ..lib.pusher import download_vault_archive, get_vault_info, get_vault_tree_metadata
-from ..lib.workspace import plan_sync, scan_workspace
+from lib import config
+from lib.archive import extract_archive_bytes, replace_directory_from_archive
+from lib.pusher import download_vault_archive, get_vault_info, get_vault_tree_metadata
+from lib.workspace import plan_sync, scan_workspace
 
 
 PRESERVE_NAMES = {".geode", ".git"}

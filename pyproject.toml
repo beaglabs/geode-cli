@@ -25,6 +25,7 @@ geode = "cli.main:main"
 
 [tool.setuptools]
 include-package-data = false
+py-modules = ["main"]
 
 [tool.setuptools.packages.find]
-include = ["cli*"]
+include = ["cli*", "commands*", "lib*"]

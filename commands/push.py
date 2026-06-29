@@ -19,9 +19,9 @@ from typing import Optional
 
 import httpx
 
-from ..lib import config, ignore, hasher, cache
-from ..lib.converters import can_convert, convert, output_type
-from ..lib.pusher import (
+from lib import config, ignore, hasher, cache
+from lib.converters import can_convert, convert, output_type
+from lib.pusher import (
     build_tar,
     complete_push,
     get_push_run_status,
@@ -30,7 +30,7 @@ from ..lib.pusher import (
     start_push,
     upload_tar,
 )
-from ..lib.workspace import classify_push_outcome, diff_entry_maps, scan_workspace
+from lib.workspace import classify_push_outcome, diff_entry_maps, scan_workspace
 
 
 def register_push_command(subparsers):

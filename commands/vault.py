@@ -5,7 +5,7 @@ geode vault – Vault management commands.
 """
 
 import argparse
-from ..lib import config
+from lib import config
 
 
 def register_vault_command(subparsers):
