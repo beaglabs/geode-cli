@@ -4,8 +4,11 @@ geode vault – Vault management commands.
   geode vault set-url <url>   Configure remote and vault for the current directory.
 """
 
-import argparse
+import os
+from urllib.parse import urlparse
+
 from lib import config
+from lib.pusher import resolve_vault_by_path
 
 
 def register_vault_command(subparsers):
@@ -15,22 +18,53 @@ def register_vault_command(subparsers):
     set_url = vault_sub.add_parser("set-url", help="Configure upstream remote")
     set_url.add_argument("url", help="Remote URL (https://geode.beaglabs.com) or local path")
     set_url.add_argument("--vault-id", help="Vault UUID (optional, auto-detected from URL)")
+    set_url.add_argument("--token", help="API auth token (or set GEODE_TOKEN env var)")
 
     vault_sub.add_parser("create", help="Create a new local vault (stub)")
 
 
 def handle_vault(args):
     if args.vault_command == "set-url":
-        url = args.url
-        config.set_remote(url)
+        token = args.token or os.environ.get("GEODE_TOKEN")
+        remote = args.url
+        vault_id = args.vault_id
+
+        if remote and not vault_id:
+            remote, vault_id = _detect_vault_config(remote, token)
+
+        config.set_remote(remote)
         config.set_head_commit_id(None)
 
-        if args.vault_id:
-            config.set_vault_id(args.vault_id)
+        if vault_id:
+            config.set_vault_id(vault_id)
 
-        print(f"Remote set to: {url}")
-        if args.vault_id:
-            print(f"Vault ID set to: {args.vault_id}")
+        print(f"Remote set to: {remote}")
+        if vault_id:
+            print(f"Vault ID set to: {vault_id}")
+        else:
+            print("Vault ID not set. Use a full vault URL or pass --vault-id before running push/sync/status.")
 
     elif args.vault_command == "create":
         print("geode vault create: stub — implementation pending")
+
+
+def _detect_vault_config(remote_value: str, token: str | None) -> tuple[str, str | None]:
+    if not (remote_value.startswith("http://") or remote_value.startswith("https://")):
+        return remote_value, None
+
+    parsed = urlparse(remote_value)
+    parts = [part for part in parsed.path.split("/") if part]
+    if len(parts) < 2:
+        return remote_value, None
+
+    remote = f"{parsed.scheme}://{parsed.netloc}"
+    owner = parts[-2]
+    vault_slug = parts[-1]
+
+    try:
+        vault = resolve_vault_by_path(remote, owner, vault_slug, token)
+    except Exception as exc:
+        print(f"Warning: could not auto-detect vault id from {remote_value}: {exc}")
+        return remote, None
+
+    return remote, vault.get("id")

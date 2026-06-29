@@ -283,7 +283,8 @@ Subcommands currently implemented:
 
 - writes the remote URL into workspace config
 - clears the tracked `head_commit_id`
-- optionally stores a new vault id
+- stores a new vault id when `--vault-id` is passed
+- if `<url>` is a full vault URL like `https://host/owner/vault`, the CLI attempts to resolve the vault id automatically
 
 `create` behavior:
 
@@ -293,6 +294,7 @@ Example:
 
 ```bash
 geode vault set-url https://geode.example.com --vault-id <vault-uuid>
+geode vault set-url https://geode.example.com/jane/wildfire-forecast
 ```
 
 ## Supported File Conversion

@@ -21,7 +21,7 @@ def handle_status(args):
 
     vault_id = config.get_vault_id()
     if not vault_id:
-        print("Error: no vault configured. Run 'geode vault set-url <url>' first.")
+        print("Error: no vault configured. Run 'geode vault set-url <vault-url>' or 'geode vault set-url <remote> --vault-id <id>' first.")
         sys.exit(1)
 
     token = args.token or os.environ.get("GEODE_TOKEN")
